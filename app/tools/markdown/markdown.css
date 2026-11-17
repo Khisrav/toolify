@@ -1,0 +1,115 @@
+/*
+ * Rendered-Markdown styles. Used by the preview (imported normally) and embedded verbatim in
+ * exported HTML (imported with ?raw), so it must not depend on app tokens or Tailwind.
+ * Light colours by default; dark under `.dark` (app) or `.md-dark` / prefers-color-scheme (export).
+ */
+.md-body {
+  --md-fg: #1f2328;
+  --md-muted: #59636e;
+  --md-border: #d1d9e0;
+  --md-subtle: #f6f8fa;
+  --md-link: #0969da;
+  --md-mark: #fff8c5;
+  color: var(--md-fg);
+  font-family: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-wrap: break-word;
+}
+.dark .md-body,
+.md-dark .md-body {
+  --md-fg: #e6edf3;
+  --md-muted: #9198a1;
+  --md-border: #3d444d;
+  --md-subtle: #151b23;
+  --md-link: #4493f8;
+  --md-mark: #bb800926;
+}
+
+.md-body > :first-child { margin-top: 0 !important; }
+.md-body > :last-child { margin-bottom: 0 !important; }
+.md-body p, .md-body blockquote, .md-body ul, .md-body ol, .md-body dl, .md-body table, .md-body pre, .md-body details, .md-body hr {
+  margin: 0 0 1em;
+}
+.md-body h1, .md-body h2, .md-body h3, .md-body h4, .md-body h5, .md-body h6 {
+  margin: 1.5em 0 0.6em;
+  font-weight: 600;
+  line-height: 1.25;
+  scroll-margin-top: 1rem;
+}
+.md-body h1 { font-size: 2em; padding-bottom: 0.3em; border-bottom: 1px solid var(--md-border); }
+.md-body h2 { font-size: 1.5em; padding-bottom: 0.3em; border-bottom: 1px solid var(--md-border); }
+.md-body h3 { font-size: 1.25em; }
+.md-body h4 { font-size: 1em; }
+.md-body h5 { font-size: 0.875em; }
+.md-body h6 { font-size: 0.85em; color: var(--md-muted); }
+
+.md-body a { color: var(--md-link); text-decoration: underline; text-underline-offset: 2px; }
+.md-body strong { font-weight: 600; }
+.md-body mark { background: var(--md-mark); color: inherit; }
+.md-body hr { height: 0; border: 0; border-top: 2px solid var(--md-border); margin: 1.5em 0; }
+.md-body img { max-width: 100%; height: auto; border-radius: 4px; }
+
+.md-body ul, .md-body ol { padding-left: 2em; }
+.md-body ul { list-style: disc; }
+.md-body ol { list-style: decimal; }
+.md-body ul ul { list-style: circle; }
+.md-body li + li { margin-top: 0.25em; }
+.md-body li > ul, .md-body li > ol { margin: 0.25em 0 0; }
+.md-body .contains-task-list { list-style: none; padding-left: 1.25em; }
+.md-body .task-list-item { position: relative; }
+.md-body .task-list-item-checkbox { margin: 0 0.4em 0 -1.25em; vertical-align: middle; accent-color: var(--md-link); }
+
+.md-body blockquote {
+  padding: 0 1em;
+  color: var(--md-muted);
+  border-left: 0.25em solid var(--md-border);
+}
+
+.md-body code, .md-body kbd, .md-body pre {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 0.875em;
+}
+.md-body :not(pre) > code {
+  padding: 0.15em 0.4em;
+  background: var(--md-subtle);
+  border: 1px solid var(--md-border);
+  border-radius: 6px;
+}
+.md-body kbd {
+  padding: 0.1em 0.4em;
+  border: 1px solid var(--md-border);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  background: var(--md-subtle);
+}
+.md-body pre {
+  padding: 1em;
+  overflow: auto;
+  line-height: 1.5;
+  background: var(--md-subtle);
+  border: 1px solid var(--md-border);
+  border-radius: 8px;
+}
+.md-body pre code { padding: 0; background: none; border: 0; font-size: inherit; }
+
+/* Shiki dual themes (rendered with defaultColor: false → CSS variables only). */
+.md-body .shiki { background-color: var(--shiki-light-bg); }
+.md-body .shiki span { color: var(--shiki-light); }
+.dark .md-body .shiki, .md-dark .md-body .shiki { background-color: var(--shiki-dark-bg); }
+.dark .md-body .shiki span, .md-dark .md-body .shiki span { color: var(--shiki-dark); }
+
+.md-body table { display: block; width: max-content; max-width: 100%; overflow: auto; border-collapse: collapse; }
+.md-body th, .md-body td { padding: 0.4em 0.9em; border: 1px solid var(--md-border); }
+.md-body th { font-weight: 600; background: var(--md-subtle); }
+.md-body tr:nth-child(2n) td { background: color-mix(in srgb, var(--md-subtle) 60%, transparent); }
+
+.md-body details { padding: 0.5em 1em; border: 1px solid var(--md-border); border-radius: 8px; }
+.md-body summary { cursor: pointer; font-weight: 600; }
+
+@media print {
+  .md-body { font-size: 11pt; }
+  .md-body pre, .md-body blockquote, .md-body table, .md-body img { break-inside: avoid; }
+  .md-body h1, .md-body h2, .md-body h3 { break-after: avoid; }
+  .md-body a { color: inherit; }
+}
