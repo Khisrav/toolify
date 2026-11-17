@@ -20,6 +20,8 @@ export interface Capabilities {
   directoryPicker: boolean
   webShareFiles: boolean
   wasmSimd: boolean
+  /** VideoDecoder + VideoEncoder + AudioDecoder (needed by the video tools). */
+  webCodecs: boolean
   /** Formats `OffscreenCanvas.convertToBlob` can really encode (checked via `blob.type`). */
   nativeEncode: { jpeg: boolean; png: boolean; webp: boolean; avif: boolean }
 }
@@ -86,6 +88,9 @@ export function detectSyncCapabilities(): Omit<Capabilities, 'nativeEncode'> {
     directoryPicker: typeof (g as { showDirectoryPicker?: unknown }).showDirectoryPicker === 'function',
     webShareFiles: typeof nav?.canShare === 'function',
     wasmSimd,
+    webCodecs: typeof (g as { VideoDecoder?: unknown }).VideoDecoder === 'function'
+      && typeof (g as { VideoEncoder?: unknown }).VideoEncoder === 'function'
+      && typeof (g as { AudioDecoder?: unknown }).AudioDecoder === 'function',
   }
 }
 

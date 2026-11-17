@@ -12,5 +12,7 @@ export default defineConfig({
   test: {
     include: ['tests/unit/**/*.test.ts'],
     environment: 'happy-dom',
+    // Process CSS so `?raw` imports (Markdown export styles) carry real content.
+    css: true,
   },
 })

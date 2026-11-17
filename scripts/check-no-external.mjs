@@ -6,8 +6,15 @@ const root = new URL('../.output/public', import.meta.url).pathname
 const ALLOW_ALWAYS = [
   /^https?:\/\/(www\.)?w3\.org\//, /^https?:\/\/vuejs\.org\//, /^https?:\/\/nuxt\.com\//,
   /^https?:\/\/tailwindcss\.com/, /^https?:\/\/bit\.ly\/wb-precache/,
-  /^https?:\/\/[ab]\.invalid/, /^https?:\/\/localhost/, /^https?:\/\/127\.0\.0\.1/,
+  /^https?:\/\/[ab]\.invalid/,
+  // Inert strings in Mediabunny: the MPL licence header and codec-spec identifiers in error text.
+  /^https:\/\/mozilla\.org\/MPL\//, /^https:\/\/mozilla\.org\/?$/, /^https:\/\/aomediacodec\.github\.io\//, /^https:\/\/www\.webmproject\.org\//,
+  // Rolldown's stub for Node built-ins (never loaded in the browser) links its docs in an error string.
+  /^https:\/\/rolldown\.rs\//,
+  /^https?:\/\/localhost/, /^https?:\/\/127\.0\.0\.1/,
 ]
+// `http://${…}` in JS is a scheme prefix added to a runtime value (e.g. markdown-it linkify), not a fixed origin.
+const TEMPLATE_PREFIX = /^https?:\/\/\$\{/
 const ICONIFY = /^https?:\/\/api\d*\.iconify\.design/
 const urlRe = /https?:\/\/[^\s"'`)<>\\,;]+/g
 const attrRe = /\b(?:src|href|action|poster|data)\s*=\s*["']?\s*((?:https?:)?\/\/[^"'\s>]+)/gi
@@ -41,6 +48,7 @@ for (const f of walk(root)) {
     for (const m of text.matchAll(urlRe)) {
       const u = m[0]
       if (ICONIFY.test(u)) { iconifySeen = true; continue }
+      if (TEMPLATE_PREFIX.test(u)) continue
       if (!allowed(u)) bad.push(`${rel}: ${u}`)
     }
   }

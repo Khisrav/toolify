@@ -4,16 +4,19 @@ import { defineConfig, devices } from '@playwright/test'
 const chromiumPath = process.env.PW_CHROMIUM_PATH
 const firefoxPath = process.env.PW_FIREFOX_PATH
 
+// PW_PORT lets a second checkout/session test against its own server without clashing.
+const port = Number(process.env.PW_PORT || 4173)
+
 // Prerequisite: `npm run generate` (also runs postgenerate -> _headers) so .output/public exists.
 export default defineConfig({
   testDir: 'tests/e2e',
   reporter: 'list',
   fullyParallel: true,
   retries: 0,
-  use: { baseURL: 'http://localhost:4173', trace: 'retain-on-failure', serviceWorkers: 'allow' },
+  use: { baseURL: `http://localhost:${port}`, trace: 'retain-on-failure', serviceWorkers: 'allow' },
   webServer: {
-    command: 'node scripts/serve.mjs 4173',
-    url: 'http://localhost:4173/',
+    command: `node scripts/serve.mjs ${port}`,
+    url: `http://localhost:${port}/`,
     reuseExistingServer: true,
   },
   projects: [

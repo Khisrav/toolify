@@ -14,7 +14,7 @@ test('no CSP violations on load', async ({ page }) => {
   await page.addInitScript(() => {
     document.addEventListener('securitypolicyviolation', e => ((window as unknown as { __csp?: string[] }).__csp ??= []).push(`${e.violatedDirective} ${e.blockedURI}`))
   })
-  for (const p of ['/', '/tools/image-studio']) {
+  for (const p of ['/', '/tools/image-studio', '/tools/markdown']) {
     await page.goto(p)
     await page.waitForLoadState('networkidle')
     violations.push(...(await page.evaluate(() => (window as unknown as { __csp?: string[] }).__csp ?? [])))

@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright'
 import { test, expect } from './fixtures'
 
-for (const path of ['/', '/tools/image-studio']) {
+for (const path of ['/', '/tools/image-studio', '/tools/markdown']) {
   for (const colorScheme of ['light', 'dark'] as const) {
     test(`a11y ${path} (${colorScheme})`, async ({ page }) => {
       await page.emulateMedia({ colorScheme })

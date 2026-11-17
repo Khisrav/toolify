@@ -1,6 +1,6 @@
 import { test as base, expect } from '@playwright/test'
 
-const ORIGIN = 'http://localhost:4173'
+const ORIGIN = `http://localhost:${process.env.PW_PORT || 4173}`
 
 /** Extends `test` with a network guard: any request to a non-local origin fails the test. */
 export const test = base.extend<{ externalRequests: string[] }>({

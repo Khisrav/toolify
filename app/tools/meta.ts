@@ -32,6 +32,8 @@ export const categories: { id: ToolCategory; label: string; icon: string }[] = [
   { id: 'utility', label: 'Utilities', icon: 'i-lucide-wrench' },
 ]
 
+const videoAccepts = ['video/*', 'audio/*', '.mp4', '.m4v', '.mov', '.webm', '.mkv', '.ts', '.mp3', '.m4a', '.wav', '.ogg', '.opus', '.flac', '.aac']
+
 const imageAccepts = ['image/*', '.heic', '.heif', '.ico', '.bmp', '.avif']
 
 export const tools: ToolMeta[] = [
@@ -48,11 +50,12 @@ export const tools: ToolMeta[] = [
   {
     slug: 'markdown',
     title: 'Markdown Editor',
-    description: 'Write Markdown with live preview, GFM and code highlighting.',
+    description: 'Write Markdown with live preview, GFM and code highlighting. Export HTML or PDF.',
     category: 'document',
     icon: 'i-lucide-file-code',
-    keywords: ['markdown', 'md', 'editor', 'preview', 'gfm'],
-    status: 'soon',
+    keywords: ['markdown', 'md', 'editor', 'preview', 'gfm', 'readme', 'notes', 'html', 'pdf'],
+    status: 'available',
+    accepts: ['.md', '.markdown', '.mdown', '.mkd', '.txt', 'text/markdown', 'text/plain'],
   },
   {
     slug: 'docx-to-pdf',
@@ -75,20 +78,24 @@ export const tools: ToolMeta[] = [
   {
     slug: 'video-edit',
     title: 'Video Editor',
-    description: 'Trim, cut, crop, rotate and merge clips.',
+    description: 'Trim, resize, compress and convert video, or extract and replace its audio.',
     category: 'video',
     icon: 'i-lucide-clapperboard',
-    keywords: ['video', 'trim', 'cut', 'crop', 'merge', 'mp4'],
-    status: 'soon',
+    keywords: ['video', 'trim', 'cut', 'resize', 'rotate', 'compress', 'convert', 'mp4', 'webm', 'mkv', 'mov', 'audio', 'mp3', 'extract', 'mute'],
+    status: 'available',
+    accepts: videoAccepts,
+    requires: ['webCodecs'],
   },
   {
     slug: 'video-optimize',
     title: 'Video Compressor',
-    description: 'Re-encode video to a smaller size or another format.',
+    description: 'Shrink a video to a quality level or an exact file size.',
     category: 'video',
     icon: 'i-lucide-film',
-    keywords: ['video', 'compress', 'encode', 'mp4', 'webm', 'bitrate'],
-    status: 'soon',
+    keywords: ['video', 'compress', 'encode', 'mp4', 'webm', 'bitrate', 'size', 'shrink', 'discord'],
+    status: 'available',
+    accepts: videoAccepts,
+    requires: ['webCodecs'],
   },
   {
     slug: 'keyboard-test',

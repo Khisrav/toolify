@@ -4,8 +4,20 @@
     {
       "name": "static",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["scripts/serve.mjs", "4173"],
+      "runtimeArgs": [
+        "scripts/serve.mjs",
+        "4173"
+      ],
       "port": 4173
+    },
+    {
+      "name": "static-4174",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "scripts/serve.mjs",
+        "4174"
+      ],
+      "port": 4174
     }
   ]
 }

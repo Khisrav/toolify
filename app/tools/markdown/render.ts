@@ -4,10 +4,10 @@
  * Code highlighting is injected by the caller (see highlight.ts) so this module stays synchronous.
  */
 import MarkdownIt from 'markdown-it'
-import type { Options, PluginSimple } from 'markdown-it'
 import DOMPurify from 'dompurify'
 
 export type Highlighter = (code: string, lang: string) => string | null
+type PluginSimple = (md: InstanceType<typeof MarkdownIt>) => void
 
 // ---------------------------------------------------------------------------
 // plugins
@@ -26,14 +26,16 @@ const taskLists: PluginSimple = (md) => {
       first.content = first.content.slice(m[0].length)
       inline.content = inline.content.slice(m[0].length)
       const box = new state.Token('html_inline', '', 0)
-      box.content = `<input type="checkbox" class="task-list-item-checkbox" disabled${m[1] === ' ' ? '' : ' checked'}> `
+      box.content = m[1] === ' '
+        ? '<input type="checkbox" class="task-list-item-checkbox" disabled aria-label="Not done"> '
+        : '<input type="checkbox" class="task-list-item-checkbox" disabled checked aria-label="Done"> '
       inline.children!.unshift(box)
       tokens[i - 2]!.attrJoin('class', 'task-list-item')
       // Mark the enclosing list.
       for (let j = i - 3; j >= 0; j--) {
         const t = tokens[j]!
         if ((t.type === 'bullet_list_open' || t.type === 'ordered_list_open') && t.level === tokens[i - 2]!.level - 1) {
-          if (!t.attrGet('class')?.includes('contains-task-list')) t.attrJoin('class', 'contains-task-list')
+          if (!String(t.attrGet('class') ?? '').includes('contains-task-list')) t.attrJoin('class', 'contains-task-list')
           break
         }
       }
@@ -99,11 +101,11 @@ export function createRenderer(options: { highlight?: Highlighter } = {}) {
     html: true,
     linkify: true,
     typographer: true,
-    highlight: ((code: string, lang: string) => {
+    highlight: (code: string, lang: string) => {
       const out = lang ? options.highlight?.(code, lang.toLowerCase()) : null
       if (out) return out
       return `<pre class="md-code"><code${lang ? ` class="language-${escapeHtml(lang)}"` : ''}>${escapeHtml(code)}</code></pre>`
-    }) as Options['highlight'],
+    },
   })
   md.use(taskLists).use(headingAnchors)
   hookPurify()

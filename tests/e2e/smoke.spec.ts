@@ -1,6 +1,6 @@
 import { test, expect } from './fixtures'
 
-for (const path of ['/', '/tools/image-studio', '/settings', '/privacy']) {
+for (const path of ['/', '/tools/image-studio', '/tools/markdown', '/settings', '/privacy']) {
   test(`smoke ${path}`, async ({ page }) => {
     const errors: string[] = []
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()) })

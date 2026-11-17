@@ -8,4 +8,7 @@ type Loader = () => Promise<{ default: Component }>
 
 export const toolLoaders: Record<string, Loader> = {
   'image-studio': () => import('./image-studio/Tool.vue'),
+  'markdown': () => import('./markdown/Tool.vue'),
+  'video-edit': () => import('./video-edit/Tool.vue'),
+  'video-optimize': () => import('./video-edit/Tool.vue'),
 }

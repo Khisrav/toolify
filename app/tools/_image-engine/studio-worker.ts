@@ -176,8 +176,23 @@ exposeTool<StudioJobInput, StudioJobResult>(async (input, ctx) => {
       else {
         attempt = round > 0 ? await encoder.encode(current, s.quality) : blob
       }
-      const dims = { width: current.width, height: current.height }
+      let dims = { width: current.width, height: current.height }
       if (current !== base) release(current)
+      // Lossless output shrinks faster than pixel count (resampling smooths detail), so a fit
+      // can overshoot. With >15% headroom, try once a little larger, staying below the last miss.
+      if (!lossy && round > 0 && attempt.size <= targetBytes && attempt.size < targetBytes * 0.85) {
+        const lastMiss = k / Math.min(0.9, Math.sqrt(targetBytes / smallest.blob.size) * 0.95)
+        const k2 = Math.min(lastMiss * 0.97, k * Math.sqrt(targetBytes / attempt.size) * 0.97)
+        if (k2 > k) {
+          const bigger = scaled(base, k2)
+          const retry = await encoder.encode(bigger, s.quality)
+          if (retry.size <= targetBytes) {
+            attempt = retry
+            dims = { width: bigger.width, height: bigger.height }
+          }
+          release(bigger)
+        }
+      }
       if (attempt.size < smallest.blob.size) smallest = { blob: attempt, ...dims }
       if (attempt.size <= targetBytes) {
         fitted = true
